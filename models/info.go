@@ -7,20 +7,18 @@ import (
 )
 
 type IC struct {
-	_id       string
-	Name      string
-	Sex       string
-	Nation    string
-	Birthday  string
-	Hometown  string
-	Career    string
-	IDCard    string
-	Unit      string
-	Living    string
-	Father    string
-	Mother    string
-	Brother   string
-	Education string
+	Name      string `json:"name"`
+	Sex       string `json:"sex"`
+	Nation    string `json:"nation"`
+	Birthday  string `json:"birthday"`
+	Hometown  string `json:"hometown"`
+	Career    string `json:"career"`
+	IDCard    string `json:"IDCard"`
+	Unit      string `json:"unit"`
+	Living    string `json:"living"`
+	Father    string `json:"father"`
+	Mother    string `json:"mother"`
+	Education string `json:"education"`
 }
 
 func GetInfos() (infos []IC, total int) {
@@ -39,5 +37,17 @@ func GetInfo(queryMap map[string]string) (infos []IC) {
 		_ = fmt.Errorf("get info err: %s", err)
 	}
 	_ = cur.All(context.TODO(), &infos)
+	return
+}
+
+func EditInfo(IDCard string, info *IC) (count int64, err error) {
+	result, err := collection.UpdateOne(context.TODO(), bson.M{"idcard": IDCard}, bson.M{"$set": info})
+	count = result.ModifiedCount
+	return
+}
+
+func AddInfo(info *IC) (infoId interface{}, err error) {
+	result, err := collection.InsertOne(context.TODO(), info)
+	infoId = result.InsertedID
 	return
 }
