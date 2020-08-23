@@ -159,14 +159,19 @@ export default {
       editAddress: "", // 第四列输入框
     };
   },
+  mounted: function() {
+    this.getData()
+         
+  },
   methods: {
-    getData() {
-        this.$http.get('/api/v1/infos').then(function(res){
-                this.data.data = res.data
+      getData() {
+            this.$http.get('/api/v1/infos').then(function(res){
+                this.data.data = res.data    
             },function(){
                 console.log('请求失败处理');
             });
-    },
+
+      },
     handleEdit(row, index) {
       this.editName = row.name;
       this.editAge = row.age;

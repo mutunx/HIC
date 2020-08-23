@@ -5,10 +5,8 @@ import Routers from './router';
 import Util from './libs/util';
 import App from './app.vue';
 import 'view-design/dist/styles/iview.css';
-
 Vue.use(VueRouter);
 Vue.use(ViewUI);
-
 // 路由配置
 const RouterConfig = {
     mode: 'history',
