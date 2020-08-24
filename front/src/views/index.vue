@@ -55,7 +55,7 @@
         </Breadcrumb>
         <Card>
           <div style="min-height: 200px;">
-            <Table :columns="columns" :data="data">
+            <Table :columns="columns" :data="infos">
               <template slot-scope="{ row, index }" slot="name">
                 <Input type="text" v-model="editName" v-if="editIndex === index" />
                 <span v-else>{{ row.name }}</span>
@@ -151,7 +151,7 @@ export default {
           slot: "action",
         },
       ],
-      data: [],
+      infos: [],
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
       editAge: "", // 第二列输入框
@@ -159,16 +159,18 @@ export default {
       editAddress: "", // 第四列输入框
     };
   },
-  mounted: function() {
-    this.getData()
-         
+  created() {
+   var that=this
+    this.$axios.get('infos').then(function(res){
+              console.log(res.data.data.data)
+                that.infos =   res.data.data.data 
+            });
   },
   methods: {
       getData() {
             this.$axios.get('infos').then(function(res){
-                this.data.data = res.data    
-            }).catch(function(){
-                console.log('请求失败处理');
+              console.log(res.data.data.data)
+                return  res.data.data.data 
             });
 
       },
