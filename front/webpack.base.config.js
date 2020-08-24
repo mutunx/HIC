@@ -3,6 +3,24 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
+    devServer: {
+        open: true,    //是否自动打开浏览器
+        host: 'localhost',
+        port: 8081,    //启动端口号
+        https: false,    //是否开启https
+        hotOnly: false,
+        proxy: { // 配置跨域
+            '/hic': {
+                target: 'http://localhost:8099/api/v1/',
+                ws: true,
+                changeOrigin: true,    //是否开启代理
+                pathRewrite: {
+                    '^/hic': ''
+                }
+            }
+        },
+        before: app => {}
+    },
     entry: {
         main: './src/main',
         vendors: './src/vendors'

@@ -165,9 +165,9 @@ export default {
   },
   methods: {
       getData() {
-            this.$http.get('/api/v1/infos').then(function(res){
+            this.$axios.get('infos').then(function(res){
                 this.data.data = res.data    
-            },function(){
+            }).catch(function(){
                 console.log('请求失败处理');
             });
 
