@@ -55,6 +55,23 @@
         </Breadcrumb>
         <Card>
           <div style="min-height: 200px;">
+            <Row>
+              <Col span="12">
+                <Cascader :data="areas" change-on-select></Cascader>
+                </Col>
+              <Col span="12">
+                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+                </Col>
+              <Col span="12">
+               <Input suffix="ios-search" placeholder="Enter text" style="width: auto" />
+                </Col>
+                
+              <Col span="12">
+               <Button :size="buttonSize" icon="ios-cloud-upload"  type="primary">导入</Button>
+                </Col>
+            </Row>
+             
+             
             <Table :columns="columns" :data="infos">
               <template slot-scope="{ row, index }" slot="name">
                 <Input type="text" v-model="editName" v-if="editIndex === index" />
@@ -152,6 +169,53 @@ export default {
         },
       ],
       infos: [],
+      areas:[{
+                    value: 'beijing',
+                    label: '北京',
+                    children: [
+                        {
+                            value: 'gugong',
+                            label: '故宫'
+                        },
+                        {
+                            value: 'tiantan',
+                            label: '天坛'
+                        },
+                        {
+                            value: 'wangfujing',
+                            label: '王府井'
+                        }
+                    ]
+                }, {
+                    value: 'jiangsu',
+                    label: '江苏',
+                    children: [
+                        {
+                            value: 'nanjing',
+                            label: '南京',
+                            children: [
+                                {
+                                    value: 'fuzimiao',
+                                    label: '夫子庙',
+                                }
+                            ]
+                        },
+                        {
+                            value: 'suzhou',
+                            label: '苏州',
+                            children: [
+                                {
+                                    value: 'zhuozhengyuan',
+                                    label: '拙政园',
+                                },
+                                {
+                                    value: 'shizilin',
+                                    label: '狮子林',
+                                }
+                            ]
+                        }
+                    ],
+                }],
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
       editAge: "", // 第二列输入框
