@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"humanInfoCollection/models"
+	"humanInfoCollection/pkg/util"
 	"net/http"
 )
 
@@ -91,4 +92,32 @@ func AddInfo(c *gin.Context) {
 			"msg": "error",
 		})
 	}
+}
+
+func TestInfo(c *gin.Context) {
+	target := c.Param("target")
+	operation := c.Query("operation")
+	param := c.Query("param")
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"data": getMethod(target, operation)(param),
+	})
+
+}
+
+func getMethod(target string, operation string) func(...interface{}) interface{} {
+	switch target {
+	case "info":
+		switch operation {
+		case "getJson":
+			return getInfoJson
+		}
+	}
+	return nil
+}
+
+func getInfoJson(params ...interface{}) interface{} {
+
+	return util.GetInfo(params[0].(string), 0)
 }
