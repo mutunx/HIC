@@ -73,35 +73,7 @@
              
              
             <Table :columns="columns" :data="infos">
-              <template slot-scope="{ row, index }" slot="name">
-                <Input type="text" v-model="editName" v-if="editIndex === index" />
-                <span v-else>{{ row.name }}</span>
-              </template>
 
-              <template slot-scope="{ row, index }" slot="age">
-                <Input type="text" v-model="editAge" v-if="editIndex === index" />
-                <span v-else>{{ row.age }}</span>
-              </template>
-
-              <template slot-scope="{ row, index }" slot="birthday">
-                <Input type="text" v-model="editBirthday" v-if="editIndex === index" />
-                <span v-else>{{ getBirthday(row.birthday) }}</span>
-              </template>
-
-              <template slot-scope="{ row, index }" slot="address">
-                <Input type="text" v-model="editAddress" v-if="editIndex === index" />
-                <span v-else>{{ row.address }}</span>
-              </template>
-
-              <template slot-scope="{ row, index }" slot="action">
-                <div v-if="editIndex === index">
-                  <Button @click="handleSave(index)">保存</Button>
-                  <Button @click="editIndex = -1">取消</Button>
-                </div>
-                <div v-else>
-                  <Button @click="handleEdit(row, index)">操作</Button>
-                </div>
-              </template>
             </Table>
           </div>
         </Card>
@@ -117,55 +89,55 @@ export default {
       columns: [
         {
           title: "姓名",
-          slot: "name",
+          key: "name",
         },
         {
           title: "性别",
-          slot: "sex",
+          key: "sex",
         },
         {
           title: "民族",
-          slot: "nation",
+          key: "nation",
         },
         {
           title: "出生日期",
-          slot: "birthday",
+          key: "birthday",
         },
         {
           title: "籍贯",
-          slot: "hometown",
+          key: "hometown",
         },
         {
           title: "职业",
-          slot: "career",
+          key: "career",
         },
         {
           title: "身份证",
-          slot: "IDCard",
+          key: "IDCard",
         },
         {
           title: "单位",
-          slot: "unit",
+          key: "unit",
         },
         {
           title: "现居地",
-          slot: "living",
+          key: "living",
         },
         {
           title: "父亲",
-          slot: "father",
+          key: "father",
         },
         {
           title: "母亲",
-          slot: "mother",
+          key: "mother",
         },
         {
           title: "教育背景",
-          slot: "education",
+          key: "education",
         },
         {
           title: "操作",
-          slot: "action",
+          key: "action",
         },
       ],
       infos: [],
@@ -218,9 +190,7 @@ export default {
                 }],
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
-      editAge: "", // 第二列输入框
       editBirthday: "", // 第三列输入框
-      editAddress: "", // 第四列输入框
     };
   },
   created() {
@@ -240,25 +210,15 @@ export default {
       },
     handleEdit(row, index) {
       this.editName = row.name;
-      this.editAge = row.age;
-      this.editAddress = row.address;
       this.editBirthday = row.birthday;
       this.editIndex = index;
     },
     handleSave(index) {
       this.data[index].name = this.editName;
-      this.data[index].age = this.editAge;
       this.data[index].birthday = this.editBirthday;
-      this.data[index].address = this.editAddress;
       this.editIndex = -1;
     },
-    getBirthday(birthday) {
-      const date = new Date(parseInt(birthday));
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-      const day = date.getDate();
-      return `${year}-${month}-${day}`;
-    },
+
   },
 };
 </script>
