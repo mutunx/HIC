@@ -1,18 +1,14 @@
 package models
 
 type Info struct {
-	Name      string `json:"name"`
-	Sex       string `json:"sex"`
-	Nation    string `json:"nation"`
-	Birthday  string `json:"birthday"`
-	Hometown  string `json:"hometown"`
-	Career    string `json:"career"`
-	IDCard    string `json:"IDCard"`
-	Unit      string `json:"unit"`
-	Living    string `json:"living"`
-	Father    string `json:"father"`
-	Mother    string `json:"mother"`
-	Education string `json:"education"`
+	Name       string `json:"name"`
+	Sex        string `json:"sex"`
+	Birthday   string `json:"birthday"`
+	Province   string `json:"province"`
+	City       string `json:"city"`
+	ID         string `json:"id"`
+	Area       string `json:"area"`
+	ValidState string `json:"validState"`
 }
 
 func GetInfos() (infos []Info, total int) {

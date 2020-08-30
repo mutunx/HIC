@@ -8,20 +8,14 @@ import (
 )
 
 type IC struct {
-	_id       string
-	Name      string
-	Sex       string
-	Nation    string
-	Birthday  string
-	Hometown  string
-	Career    string
-	IDCard    string
-	Unit      string
-	Living    string
-	Father    string
-	Mother    string
-	Brother   string
-	Education string
+	Name       string
+	Sex        string
+	Birthday   string
+	Province   string
+	City       string
+	ID         string
+	Area       string
+	ValidState string
 }
 
 // 获取所有信息

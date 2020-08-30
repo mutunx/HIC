@@ -56,18 +56,18 @@
         <Card>
           <div style="min-height: 200px;">
             <Row>
-              <Col span="12">
-                <Cascader :data="areas" change-on-select></Cascader>
+              <Col span="6">
+                <Cascader :data="areas"  :load-data="loadData"></Cascader>
                 </Col>
-              <Col span="12">
-                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" style="width: 200px"></DatePicker>
+              <Col span="6">
+                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
                 </Col>
-              <Col span="12">
+              <Col span="6">
                <Input suffix="ios-search" placeholder="Enter text" style="width: auto" />
                 </Col>
                 
-              <Col span="12">
-               <Button :size="buttonSize" icon="ios-cloud-upload"  type="primary">导入</Button>
+              <Col span="6">
+               <Button :size="buttonSize" icon="ios-cloud-upload" style="text-align:end"  type="primary">导入</Button>
                 </Col>
             </Row>
              
@@ -86,6 +86,21 @@
 export default {
   data() {
     return {
+      buttonSize:'large',
+       data4: [
+                    {
+                        value: 'beijing',
+                        label: '北京',
+                        children: [],
+                        loading: false
+                    },
+                    {
+                        value: 'hangzhou',
+                        label: '杭州',
+                        children: [],
+                        loading:false
+                    }
+                ],
       columns: [
         {
           title: "姓名",
@@ -96,44 +111,28 @@ export default {
           key: "sex",
         },
         {
-          title: "民族",
-          key: "nation",
+          title: "省份",
+          key: "province",
         },
         {
           title: "出生日期",
           key: "birthday",
         },
         {
-          title: "籍贯",
-          key: "hometown",
+          title: "市县",
+          key: "city",
         },
         {
-          title: "职业",
-          key: "career",
+          title: "地区",
+          key: "area",
         },
         {
           title: "身份证",
-          key: "IDCard",
+          key: "id",
         },
         {
-          title: "单位",
-          key: "unit",
-        },
-        {
-          title: "现居地",
-          key: "living",
-        },
-        {
-          title: "父亲",
-          key: "father",
-        },
-        {
-          title: "母亲",
-          key: "mother",
-        },
-        {
-          title: "教育背景",
-          key: "education",
+          title: "验证通过",
+          key: "validState",
         },
         {
           title: "操作",
@@ -141,53 +140,7 @@ export default {
         },
       ],
       infos: [],
-      areas:[{
-                    value: 'beijing',
-                    label: '北京',
-                    children: [
-                        {
-                            value: 'gugong',
-                            label: '故宫'
-                        },
-                        {
-                            value: 'tiantan',
-                            label: '天坛'
-                        },
-                        {
-                            value: 'wangfujing',
-                            label: '王府井'
-                        }
-                    ]
-                }, {
-                    value: 'jiangsu',
-                    label: '江苏',
-                    children: [
-                        {
-                            value: 'nanjing',
-                            label: '南京',
-                            children: [
-                                {
-                                    value: 'fuzimiao',
-                                    label: '夫子庙',
-                                }
-                            ]
-                        },
-                        {
-                            value: 'suzhou',
-                            label: '苏州',
-                            children: [
-                                {
-                                    value: 'zhuozhengyuan',
-                                    label: '拙政园',
-                                },
-                                {
-                                    value: 'shizilin',
-                                    label: '狮子林',
-                                }
-                            ]
-                        }
-                    ],
-                }],
+      areas:[],
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
       editBirthday: "", // 第三列输入框
@@ -196,11 +149,27 @@ export default {
   created() {
    var that=this
     this.$axios.get('infos').then(function(res){
-              console.log(res.data.data.data)
                 that.infos =   res.data.data.data 
+            });
+            
+    this.$axios.get('adc').then(function(res){
+                that.areas =   res.data.data
             });
   },
   methods: {
+     loadData (item, callback) {
+                var that=this
+      item.loading = true;
+      setTimeout(() => {
+        this.$axios.get('adc/'+item.value+'?type='+item.code_type).then(function(res){
+          item.children =   res.data.data
+              console.log(item)
+            });
+        item.loading = false;
+        callback()
+      }, 500);
+    }
+            },
       getData() {
             this.$axios.get('infos').then(function(res){
               console.log(res.data.data.data)
@@ -219,6 +188,5 @@ export default {
       this.editIndex = -1;
     },
 
-  },
 };
 </script>
