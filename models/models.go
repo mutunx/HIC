@@ -1,35 +1,48 @@
 package models
 
 import (
-	"context"
 	"fmt"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	setting "humanInfoCollection/pkg"
 	"log"
 )
 
-var collection *mongo.Collection
+var db *gorm.DB
 
 func init() {
+	var (
+		err                                               error
+		dbType, dbName, user, password, host, tablePrefix string
+	)
 
-	// Set client options
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017")
-
-	// Connect to MongoDB
-	client, err := mongo.Connect(context.TODO(), clientOptions)
-
+	sec, err := setting.Cfg.GetSection("database")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(2, "Fail to get section 'database': %v", err)
 	}
 
-	// Check the connection
-	err = client.Ping(context.TODO(), nil)
+	dbType = sec.Key("TYPE").String()
+	dbName = sec.Key("NAME").String()
+	user = sec.Key("USER").String()
+	password = sec.Key("PASSWORD").String()
+	host = sec.Key("HOST").String()
+
+	db, err = gorm.Open(dbType, fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		user,
+		password,
+		host,
+		dbName))
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
-	fmt.Println("Connected to MongoDB!")
+	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
+		return tablePrefix + defaultTableName
+	}
 
-	collection = client.Database("hic").Collection("ic")
+	db.SingularTable(false)
+	db.LogMode(true)
+	db.DB().SetMaxIdleConns(100)
+	db.DB().SetMaxOpenConns(10000)
 }

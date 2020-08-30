@@ -2,21 +2,26 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	"humanInfoCollection/middlewave/jwt"
 	"humanInfoCollection/pkg"
-	v1 "humanInfoCollection/routers/api"
+	"humanInfoCollection/routers/api"
+	"humanInfoCollection/routers/api/v1"
 	"net/http"
 )
 
 func InitRouter() *gin.Engine {
 	e := gin.Default()
+
 	gin.SetMode(pkg.RunMode)
 
 	// ping
 	e.GET("/ping", func(context *gin.Context) {
 		context.String(http.StatusOK, "pong")
 	})
+	e.GET("/auth", api.GetAuth)
 
 	v1Group := e.Group("/api/v1")
+	v1Group.Use(jwt.JWT())
 	{
 		v1Group.GET("/infos", v1.GetInfos)
 		v1Group.GET("/infos/:IDCard", v1.GetInfo)

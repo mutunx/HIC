@@ -1,12 +1,6 @@
 package models
 
-import (
-	"context"
-	"fmt"
-	"go.mongodb.org/mongo-driver/bson"
-)
-
-type IC struct {
+type Info struct {
 	Name      string `json:"name"`
 	Sex       string `json:"sex"`
 	Nation    string `json:"nation"`
@@ -21,33 +15,23 @@ type IC struct {
 	Education string `json:"education"`
 }
 
-func GetInfos() (infos []IC, total int) {
-	cur, err := collection.Find(context.TODO(), bson.M{})
-	if err != nil {
-		_ = fmt.Errorf("get Infos err: %s", err)
-	}
-	_ = cur.All(context.TODO(), &infos)
+func GetInfos() (infos []Info, total int) {
+	db.Find(&infos)
 	total = len(infos)
 	return
 }
 
-func GetInfo(queryMap map[string]string) (infos []IC) {
-	cur, err := collection.Find(context.TODO(), queryMap)
-	if err != nil {
-		_ = fmt.Errorf("get info err: %s", err)
-	}
-	_ = cur.All(context.TODO(), &infos)
+func GetInfo(queryMap map[string]interface{}) (infos []Info) {
+	db.Where(queryMap).Find(&infos)
 	return
 }
 
-func EditInfo(IDCard string, info *IC) (count int64, err error) {
-	result, err := collection.UpdateOne(context.TODO(), bson.M{"idcard": IDCard}, bson.M{"$set": info})
-	count = result.ModifiedCount
+func EditInfo(IDCard string, info interface{}) (count int64, err error) {
+	db.Model(&Info{}).Where("id = ?", IDCard).Update(info)
 	return
 }
 
-func AddInfo(info *IC) (infoId interface{}, err error) {
-	result, err := collection.InsertOne(context.TODO(), info)
-	infoId = result.InsertedID
+func AddInfo(info *Info) (infoId interface{}, err error) {
+	db.Create(&Info{})
 	return
 }

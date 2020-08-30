@@ -1,4 +1,4 @@
-package api
+package v1
 
 import (
 	"github.com/gin-gonic/gin"
@@ -40,8 +40,8 @@ func GetInfos(c *gin.Context) {
 // 根据关键字获取数据
 func GetInfo(c *gin.Context) {
 	id := c.Param("IDCard")
-	searchMap := make(map[string]string)
-	searchMap["IDCard"] = id
+	searchMap := make(map[string]interface{})
+	searchMap["ID"] = id
 	data := models.GetInfo(searchMap)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -53,7 +53,7 @@ func GetInfo(c *gin.Context) {
 
 // 更新数据
 func EditInfo(c *gin.Context) {
-	info := &models.IC{}
+	info := &models.Info{}
 	if c.BindJSON(info) == nil {
 
 	}
@@ -74,7 +74,7 @@ func EditInfo(c *gin.Context) {
 
 // 新建数据
 func AddInfo(c *gin.Context) {
-	info := &models.IC{}
+	info := &models.Info{}
 	err := c.BindJSON(info)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
