@@ -28,6 +28,7 @@ func InitRouter() *gin.Engine {
 		v1Group.PUT("/infos/:IDCard", v1.EditInfo)
 		v1Group.GET("/adc/:code", v1.GetAdc)
 		v1Group.GET("/adc", v1.GetAdc)
+		v1Group.GET("/search/:target", v1.Search)
 		v1Group.GET("/test/:target", v1.TestInfo)
 	}
 
