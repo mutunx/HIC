@@ -2,22 +2,10 @@ package util
 
 import (
 	"fmt"
+	"humanInfoCollection/models"
 	"regexp"
 	"strconv"
 )
-
-type Info struct {
-	Id         string
-	Name       string
-	Birthday   string
-	Province   string
-	City       string
-	Area       string
-	Sex        int
-	ValidState int
-	RealState  int
-	Error      string
-}
 
 // 通过身份证前17位获取第18位校验位
 func getValidPos(id string) string {
@@ -77,22 +65,23 @@ func GetBirthday(id string) string {
 }
 
 func GetSex(id string) int {
-	sex, err := strconv.Atoi(id[17:18])
+	sex, err := strconv.Atoi(id[16:17])
 	if err != nil {
-		_ = fmt.Errorf("string %s to int error ", id[17:17])
+		_ = fmt.Errorf("string %s to int error ", id[16:17])
 	}
 	return sex % 2
 }
 
-func GetInfo(id string, realSate int) (info *Info) {
+func GetInfo(id, name string, realSate int) (info *models.Info) {
 	err := ValidIDCard(id)
 	if err != nil {
-		return &Info{
-			Id:         id,
+		return &models.Info{
+			ID:         id,
 			Birthday:   "",
 			Province:   "",
 			City:       "",
 			Area:       "",
+			Name:       "",
 			Sex:        0,
 			ValidState: 0,
 			RealState:  realSate,
@@ -104,8 +93,8 @@ func GetInfo(id string, realSate int) (info *Info) {
 	if ValidIdValidPos(id) {
 		validState = 1
 	}
-	return &Info{
-		Id:         id,
+	return &models.Info{
+		ID:         id,
 		Birthday:   GetBirthday(id),
 		Province:   GetProvince(id),
 		City:       GetCity(id),
@@ -113,6 +102,7 @@ func GetInfo(id string, realSate int) (info *Info) {
 		Sex:        GetSex(id),
 		ValidState: validState,
 		RealState:  realSate,
+		Name:       name,
 		Error:      "",
 	}
 }

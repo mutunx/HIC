@@ -1,14 +1,16 @@
 package models
 
 type Info struct {
-	Name       string `json:"name"`
-	Sex        string `json:"sex"`
-	Birthday   string `json:"birthday"`
-	Province   string `json:"province"`
-	City       string `json:"city"`
-	ID         string `json:"id"`
-	Area       string `json:"area"`
-	ValidState string `json:"validState"`
+	ID         string
+	Name       string
+	Birthday   string
+	Province   string
+	City       string
+	Area       string
+	Sex        int
+	ValidState int
+	RealState  int
+	Error      string
 }
 
 func GetInfos() (infos []Info, total int) {
@@ -28,6 +30,6 @@ func EditInfo(IDCard string, info interface{}) (count int64, err error) {
 }
 
 func AddInfo(info *Info) (infoId interface{}, err error) {
-	db.Create(&Info{})
+	db.Create(info)
 	return
 }

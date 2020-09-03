@@ -1,9 +1,12 @@
 package v1
 
 import (
+	"encoding/csv"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"humanInfoCollection/models"
 	"humanInfoCollection/pkg/util"
+	"io"
 	"net/http"
 )
 
@@ -113,5 +116,38 @@ func getMethod(target string, operation string) func(...interface{}) interface{}
 
 func getInfoJson(params ...interface{}) interface{} {
 
-	return util.GetInfo(params[0].(string), 0)
+	return util.GetInfo(params[0].(string), "", 0)
+}
+
+func ImportInfo(c *gin.Context) {
+	fileIO, error := c.FormFile("file")
+	if error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": error.Error(),
+		})
+	}
+	fio, err := fileIO.Open()
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"msg": error.Error(),
+		})
+	}
+	r := csv.NewReader(fio)
+
+	for {
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"msg": error.Error(),
+			})
+		}
+
+		fmt.Println(record)
+
+		info := util.GetInfo(record[1], record[0], 1)
+		models.AddInfo(info)
+	}
 }
