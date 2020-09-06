@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import Routers from './router';
 import Util from './libs/util';
 import App from './app.vue';
-import Axios from "axios"
+import Axios from "axios";
 import 'view-design/dist/styles/iview.css';
 Axios.defaults.baseURL="/hic";
 //将axios挂载到原型上

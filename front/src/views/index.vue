@@ -57,17 +57,19 @@
           <div style="min-height: 200px;">
             <Row>
               <Col span="6">
-                <Cascader :data="areas"  :load-data="loadData"></Cascader>
+                <Cascader :data="areas" v-model="searchArea" ></Cascader>
                 </Col>
               <Col span="6">
-                <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
+                <DatePicker type="daterange" v-model="searchTime" placement="bottom-end" placeholder="Select month" ></DatePicker>
                 </Col>
               <Col span="6">
                <Input suffix="ios-search" v-model="searchWord" placeholder="Enter text" style="width: auto" />
                 </Col>
                 
               <Col span="6">
+               <Upload action="/hic/import/info">
                <Button :size="buttonSize" icon="ios-cloud-upload" style="text-align:end"  type="primary">导入</Button>
+               </Upload>
                 </Col>
             </Row>
              
@@ -83,24 +85,11 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 export default {
   data() {
     return {
       buttonSize:'large',
-       data4: [
-                    {
-                        value: 'beijing',
-                        label: '北京',
-                        children: [],
-                        loading: false
-                    },
-                    {
-                        value: 'hangzhou',
-                        label: '杭州',
-                        children: [],
-                        loading:false
-                    }
-                ],
       columns: [
         {
           title: "姓名",
@@ -137,6 +126,8 @@ export default {
 
       ],
       searchWord:"",
+      searchTime:[],
+      searchArea:[],
       infos: [],
       areas:[],
       editIndex: -1, // 当前聚焦的输入框的行数
@@ -147,8 +138,37 @@ export default {
   watch:{
     
     searchWord: function (newWord, oldWord) {
+      if (newWord === "") {
+        return 
+      }
       var that=this
       this.$axios.get('search/info?keyword='+newWord).then(function(res){
+        console.log(res.data.data)
+                that.infos =   res.data.data
+            });
+    },
+    
+    searchTime: function (newInput, oldInput) {
+      if (newInput[0] === "") {
+        return 
+      }
+      console.log(moment(newInput[0]).format("YYYY-MM-DD"),oldInput)
+      let sTime = moment(newInput[0]).format("YYYY-MM-DD")
+      let eTime = moment(newInput[1]).format("YYYY-MM-DD")
+      var that=this
+      this.$axios.get('search/info?sTime='+sTime+"&eTime="+eTime).then(function(res){
+        console.log(res.data.data)
+                that.infos =   res.data.data
+            });
+    },
+    
+    searchArea: function (newInput) {
+      console.log(newInput)
+      if (newInput === "") {
+        return 
+      }
+      var that=this
+      this.$axios.get('search/info?keyword='+newInput[newInput.length-1]).then(function(res){
         console.log(res.data.data)
                 that.infos =   res.data.data
             });
@@ -162,14 +182,13 @@ export default {
             
     this.$axios.get('adc').then(function(res){
           let data = res.data.data
-          
-                that.areas =   res.data.data
+          console.log(data)
+                that.areas =   data
             });
   },
   methods: {
      loadData (item, callback) {
               
-    }
             },
       getData() {
             this.$axios.get('infos').then(function(res){
@@ -188,6 +207,6 @@ export default {
       this.data[index].birthday = this.editBirthday;
       this.editIndex = -1;
     },
-
+  }
 };
 </script>

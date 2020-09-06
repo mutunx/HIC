@@ -3,8 +3,7 @@ package models
 type AdministrativeDivisionsCode struct {
 	Value    string                        `json:"value"`
 	Label    string                        `json:"label"`
-	Children []AdministrativeDivisionsCode `json:"children"`
-	Loading  bool                          `json:"loading"`
+	Children []AdministrativeDivisionsCode `json:"children,omitempty"`
 	CodeType string                        `json:"code_type"`
 }
 
