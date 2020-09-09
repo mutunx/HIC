@@ -15,6 +15,7 @@ type Info struct {
 
 func GetInfos() (infos []Info, total int) {
 	db.Find(&infos)
+
 	total = len(infos)
 	return
 }

@@ -63,7 +63,7 @@
                 <DatePicker type="daterange" placement="bottom-end" placeholder="Select date" ></DatePicker>
                 </Col>
               <Col span="6">
-               <Input suffix="ios-search" placeholder="Enter text" style="width: auto" />
+               <Input suffix="ios-search" v-model="searchWord" placeholder="Enter text" style="width: auto" />
                 </Col>
                 
               <Col span="6">
@@ -104,47 +104,55 @@ export default {
       columns: [
         {
           title: "姓名",
-          key: "name",
+          key: "Name",
         },
         {
           title: "性别",
-          key: "sex",
+          key: "Sex",
         },
         {
           title: "省份",
-          key: "province",
+          key: "Province",
         },
         {
           title: "出生日期",
-          key: "birthday",
+          key: "Birthday",
         },
         {
           title: "市县",
-          key: "city",
+          key: "City",
         },
         {
           title: "地区",
-          key: "area",
+          key: "Area",
         },
         {
           title: "身份证",
-          key: "id",
+          key: "ID",
         },
         {
           title: "验证通过",
-          key: "validState",
+          key: "ValidState",
         },
-        {
-          title: "操作",
-          key: "action",
-        },
+
       ],
+      searchWord:"",
       infos: [],
       areas:[],
       editIndex: -1, // 当前聚焦的输入框的行数
       editName: "", // 第一列输入框，当然聚焦的输入框的输入内容，与 data 分离避免重构的闪烁
       editBirthday: "", // 第三列输入框
     };
+  },
+  watch:{
+    
+    searchWord: function (newWord, oldWord) {
+      var that=this
+      this.$axios.get('search/info?keyword='+newWord).then(function(res){
+        console.log(res.data.data)
+                that.infos =   res.data.data
+            });
+    }
   },
   created() {
    var that=this
@@ -153,21 +161,14 @@ export default {
             });
             
     this.$axios.get('adc').then(function(res){
+          let data = res.data.data
+          
                 that.areas =   res.data.data
             });
   },
   methods: {
      loadData (item, callback) {
-                var that=this
-      item.loading = true;
-      setTimeout(() => {
-        this.$axios.get('adc/'+item.value+'?type='+item.code_type).then(function(res){
-          item.children =   res.data.data
-              console.log(item)
-            });
-        item.loading = false;
-        callback()
-      }, 500);
+              
     }
             },
       getData() {
