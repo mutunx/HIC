@@ -4,6 +4,13 @@ const routers = [
         meta: {
             title: ''
         },
+        component: (resolve) => require(['./views/login/login.vue'], resolve)
+    },
+    {
+        path: '/index',
+        meta: {
+            title: ''
+        },
         component: (resolve) => require(['./views/index.vue'], resolve)
     }
 ];
