@@ -19,6 +19,7 @@
     "moment": "^2.27.0",
     "view-design": "^4.3.2",
     "vue": "^2.6.12",
+    "vue-cookies": "^1.7.4",
     "vue-router": "^2.8.1"
   },
   "devDependencies": {

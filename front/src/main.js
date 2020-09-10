@@ -6,9 +6,11 @@ import Util from './libs/util';
 import App from './app.vue';
 import Axios from "axios";
 import 'view-design/dist/styles/iview.css';
+import VueCookies from 'vue-cookies'
 Axios.defaults.baseURL="/hic";
 //将axios挂载到原型上
 Vue.prototype.$axios = Axios;
+Vue.use(VueCookies)
 Vue.use(VueRouter);
 Vue.use(ViewUI);
 // 路由配置
