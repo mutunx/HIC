@@ -21,7 +21,6 @@ type IC struct {
 	ValidState string
 }
 
-// 获取所有信息
 func GetInfos(c *gin.Context) {
 
 	data := make(map[string]interface{})
@@ -34,7 +33,13 @@ func GetInfos(c *gin.Context) {
 	})
 }
 
-// 根据关键字获取数据
+// @Summary 获取信息
+// @Produce  json
+// @Param name query string true "Name"
+// @Param state query int false "State"
+// @Param created_by query int false "CreatedBy"
+// @Success 200 {object} string "{"code":200,"data":{},"msg":"ok"}"
+// @Router /api/v1/tags [post]
 func GetInfo(c *gin.Context) {
 	id := c.Param("IDCard")
 	searchMap := make(map[string]interface{})

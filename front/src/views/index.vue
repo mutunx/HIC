@@ -67,7 +67,7 @@
                 </Col>
                 
               <Col span="6">
-               <Upload action="/hic/import/info">
+               <Upload action="/v1/import/info">
                <Button :size="buttonSize" icon="ios-cloud-upload" style="text-align:end"  type="primary">导入</Button>
                </Upload>
                 </Col>

@@ -10,6 +10,14 @@ module.exports = {
         https: false,    //是否开启https
         hotOnly: false,
         proxy: { // 配置跨域
+            '/v1': {
+                target: 'http://localhost:8099/api/v1/',
+                ws: true,
+                changeOrigin: true,    //是否开启代理
+                pathRewrite: {
+                    '^/v1': ''
+                }
+            },
             '/hic': {
                 target: 'http://localhost:8099/api/v1/',
                 ws: true,

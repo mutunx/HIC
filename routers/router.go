@@ -2,6 +2,9 @@ package routers
 
 import (
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
+	_ "humanInfoCollection/docs"
 	"humanInfoCollection/pkg"
 	"humanInfoCollection/routers/api"
 	"humanInfoCollection/routers/api/v1"
@@ -13,6 +16,7 @@ func InitRouter() *gin.Engine {
 
 	gin.SetMode(pkg.RunMode)
 
+	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// ping
 	e.GET("/ping", func(context *gin.Context) {
 		context.String(http.StatusOK, "pong")
